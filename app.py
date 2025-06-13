@@ -1,34 +1,30 @@
+# app.py
 from flask import Flask, render_template, request
-import pickle
 import numpy as np
+import joblib
+import os
 
-# Create the Flask app
+# Initialize the Flask application
 app = Flask(__name__)
 
 # Load the trained model
-model = pickle.load(open('model.pkl', 'rb'))
+MODEL_PATH = os.path.join('models', 'house_price_model.pkl')
+model = joblib.load(MODEL_PATH)
 
-# Route for the homepage
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# Route to handle prediction
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get all values from form and convert to float
-        values = [float(x) for x in request.form.values()]
-        inputs = [np.array(values)]
-
-        # Make prediction
-        prediction = model.predict(inputs)
+        features = [float(x) for x in request.form.values()]
+        input_array = np.array([features])
+        prediction = model.predict(input_array)
         result = round(prediction[0], 2)
-
         return render_template('index.html', prediction_text=f"Estimated House Price: ${result}K")
-    except Exception as e:
-        return render_template('index.html', prediction_text="❌ Error in input values. Please enter valid numbers.")
+    except Exception:
+        return render_template('index.html', prediction_text="\u274C Invalid input. Please enter valid numerical values.")
 
-# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
