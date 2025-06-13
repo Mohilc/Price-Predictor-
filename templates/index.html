@@ -4,30 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>House Price Predictor</title>
+    <title>House Price Estimator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .card {
+            border: none;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 4rem;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .btn-primary {
+            font-size: 1.2rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container py-5">
-        <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
-            <h2 class="mb-4 text-center">🏡 House Price Predictor</h2>
+<body>
+    <div class="container">
+        <div class="card mx-auto" style="max-width: 700px;">
+            <h1 class="text-center mb-4">Predict Your House Price</h1>
             <form action="/predict" method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Feature 1</label>
-                    <input type="number" name="feature1" step="any" class="form-control" required>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Lot Size (sq ft)</label>
+                        <input type="number" name="feature1" step="any" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Bedrooms</label>
+                        <input type="number" name="feature2" step="any" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Bathrooms</label>
+                        <input type="number" name="feature3" step="any" class="form-control" required>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Feature 2</label>
-                    <input type="number" name="feature2" step="any" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Feature 3</label>
-                    <input type="number" name="feature3" step="any" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Predict</button>
+                <button type="submit" class="btn btn-primary w-100 mt-4">Estimate Price</button>
             </form>
             {% if prediction_text %}
-                <div class="alert alert-info mt-4 text-center">{{ prediction_text }}</div>
+                <div class="alert alert-info text-center mt-4">
+                    {{ prediction_text }}
+                </div>
             {% endif %}
         </div>
     </div>
